@@ -22,7 +22,7 @@ public class PlayerComponent extends Component {
     public void right(){
         entity.translateX(speed);
     }
-    public void stop(){
+    public void stop(){//ASDF
 
     }
 }
