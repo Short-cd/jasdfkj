@@ -9,7 +9,7 @@ public class PlayerComponent extends Component {
     public Entity getPlayer(){
         return entity;
     }
-
+//movement stuff
     public void up(){
         entity.translateY(-speed);
     }
@@ -21,8 +21,5 @@ public class PlayerComponent extends Component {
     }
     public void right(){
         entity.translateX(speed);
-    }
-    public void stop(){
-
     }
 }
