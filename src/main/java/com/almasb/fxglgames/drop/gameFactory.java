@@ -20,7 +20,7 @@ public class gameFactory implements EntityFactory{
                 .viewWithBBox("player.png")
                 .collidable()
                 .with(new PlayerComponent())
-                .build();//ASDF
+                .build();
     }
 
     @Spawns("Drops")

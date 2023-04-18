@@ -43,7 +43,7 @@ public class TDGameApp extends GameApplication {
 
         playerComponent = player.getComponent(PlayerComponent.class);
 //        player.rota
-//        loopBGM("bgm.mp3");ASDF
+//        loopBGM("bgm.mp3");
     }
     @Override
     protected void initInput(){
