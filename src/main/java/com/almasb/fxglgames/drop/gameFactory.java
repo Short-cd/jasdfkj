@@ -27,12 +27,22 @@ public class gameFactory implements EntityFactory{
                 .build();
     }
 
-    @Spawns("Drops")
+    @Spawns("enemy")
     public Entity spawnDrops(SpawnData data ){//asdf
         return entityBuilder(data)
                 .type(TDGameApp.Type.ENEMY)
                 .at(FXGLMath.random(0, getAppWidth()-64), 0)
                 .viewWithBBox("droplet.png")
+                .collidable()
+                .build();
+    }
+
+    @Spawns("building")
+    public Entity spawnBuildings(SpawnData data){
+        return entityBuilder(data)
+                .type(TDGameApp.Type.BUILDING)
+                .at(FXGLMath.random(0, getAppWidth()-64), FXGLMath.random(0, getAppHeight()-64))
+                .viewWithBBox("bucket.png")
                 .collidable()
                 .build();
     }

@@ -20,10 +20,17 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class TDGameApp extends GameApplication {
 
+    //debug stuff because I am lazy
+    String left = "left";
+    String right = "right";
+    String up = "up";
+    String down = "down";
+//end lazy debugging
     public enum Type {
         PLAYER,ENEMY,BUILDING,RESOURCE
     }
 
+    boolean downPress, upPress, leftPress, rightPress;
     private Entity player;
 
     private PlayerComponent playerComponent;
@@ -41,7 +48,8 @@ public class TDGameApp extends GameApplication {
         getGameWorld().addEntityFactory(new gameFactory());
         player = spawn("Player");
 
-        run(() -> spawn("Drops"), Duration.seconds(1));
+        run(() -> spawn("enemy"), Duration.seconds(1));
+        run(()-> spawn("building"), Duration.seconds(5));
 
         playerComponent = player.getComponent(PlayerComponent.class);
     }
@@ -51,6 +59,11 @@ public class TDGameApp extends GameApplication {
             @Override
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).left();
+                leftPress = true;
+            }
+            @Override
+            protected void onActionEnd(){
+                leftPress = false;
             }
         }, KeyCode.A);
 
@@ -58,14 +71,24 @@ public class TDGameApp extends GameApplication {
             @Override
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).right();
+                rightPress = true;
             }
 
+            @Override
+            protected void onActionEnd(){
+                rightPress = false;
+            }
         }, KeyCode.D);
 
         getInput().addAction(new UserAction("Down"){
             @Override
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).down();
+                downPress = true;
+            }
+            @Override
+            protected void onActionEnd(){
+                downPress = false;
             }
         }, KeyCode.S);
 
@@ -73,6 +96,12 @@ public class TDGameApp extends GameApplication {
             @Override
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).up();
+                upPress = true;
+            }
+
+            @Override
+            protected void onActionEnd(){
+                upPress = false;
             }
         }, KeyCode.W);
     }
@@ -90,32 +119,36 @@ public class TDGameApp extends GameApplication {
         * */
         onCollision(Type.PLAYER, Type.ENEMY, (player, enemy) -> {
             player.setPosition(checkCollisionLocation(player, enemy));
-            play("drop.wav");
+//            play("drop.wav");
         });
     }
     private Point2D checkCollisionLocation(Entity thing1, Entity thing2){
-        double xLoc = 0, yLoc = 0;
+        double xLoc = thing1.getX(), yLoc = thing1.getY();
+        if(getInput())
         if(thing1.getX()<thing2.getRightX()){
-
+            System.out.println(left);
             xLoc = thing2.getX()-thing1.getWidth();
-            System.out.println(thing1.getX()+" "+thing2.getRightX()+" "+xLoc);
-        }
+//            player.getComponent(PlayerComponent.class).
+//            System.out.println(thing1.getX()+" "+thing2.getRightX()+" "+xLoc +"pushed left");
+        }else
         if(thing1.getRightX()<thing2.getX()){
-
+            System.out.println(right);
             xLoc = thing2.getRightX();
-            System.out.println(thing1.getRightX()+ " "+thing2.getX()+" "+xLoc);
-        }
+            System.out.println(thing1.getRightX()+ " "+thing2.getX()+" "+xLoc + "pushed right");
+        }else
         if(thing1.getY()<thing2.getBottomY()){
+            System.out.println(down);
             yLoc = thing2.getBottomY();
-            System.out.println(thing1.getY()+" "+thing2.getBottomY()+ " "+xLoc);
-        }
+//            System.out.println(thing1.getY()+" "+thing2.getBottomY()+ " "+xLoc + "pushed down");
+        }else
         if(thing1.getBottomY()<thing2.getY()){
+            System.out.println(up);
             yLoc = thing2.getY()-thing1.getHeight();
-            System.out.println(thing1.getBottomY()+" "+thing2.getY()+" "+xLoc);
+//            System.out.println(thing1.getBottomY()+" "+thing2.getY()+" "+xLoc + "pushed up");
         }
-        System.out.println("it checks things");
+//        System.out.println("it checks things");
         Point2D newPoint = new Point2D(xLoc, yLoc);
-        System.out.println(newPoint);
+//        System.out.println(newPoint);
         return newPoint;
     }
 
